@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Gift, Plus, Cake, Sparkles, PartyPopper } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getWishlists } from "@/lib/wishlist";
+import { getAllWishlists, type Wishlist } from "@/lib/wishlist";
 
 export default function Index() {
-  const wishlists = getWishlists();
+  const [wishlists, setWishlists] = useState<Wishlist[]>([]);
+
+  useEffect(() => {
+    getAllWishlists().then(setWishlists);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -68,10 +73,10 @@ export default function Index() {
       {/* Existing wishlists */}
       {wishlists.length > 0 && (
         <div className="container max-w-3xl pb-16 px-4">
-          <h2 className="text-2xl font-display font-bold text-foreground mb-6">Your Wishlists</h2>
+          <h2 className="text-2xl font-display font-bold text-foreground mb-6">Recent Wishlists</h2>
           <div className="space-y-3">
             {wishlists.map((w) => (
-              <Link key={w.id} to={`/wishlist/${w.id}?created=true`}>
+              <Link key={w.id} to={`/wishlist/${w.id}`}>
                 <div className="bg-card rounded-2xl p-5 shadow-card hover:shadow-lifted transition-shadow flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full gradient-warm flex items-center justify-center flex-shrink-0">
                     <Cake className="w-5 h-5 text-primary-foreground" />

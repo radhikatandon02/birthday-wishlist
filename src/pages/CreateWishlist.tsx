@@ -5,7 +5,7 @@ import { Gift, Plus, ExternalLink, Trash2, Share2, Cake, Sparkles } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { generateId, getWishlists, saveWishlists, type GiftItem } from "@/lib/wishlist";
+import { generateId, createWishlist, type GiftItem } from "@/lib/wishlist";
 import { toast } from "@/hooks/use-toast";
 
 export default function CreateWishlist() {
@@ -17,6 +17,7 @@ export default function CreateWishlist() {
   const [giftName, setGiftName] = useState("");
   const [giftLink, setGiftLink] = useState("");
   const [giftPrice, setGiftPrice] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const addGift = () => {
     if (!giftName.trim()) return;
@@ -28,7 +29,7 @@ export default function CreateWishlist() {
 
   const removeGift = (id: string) => setGifts(gifts.filter((g) => g.id !== id));
 
-  const createWishlist = () => {
+  const handleCreate = async () => {
     if (!name.trim()) {
       toast({ title: "Please enter a name", variant: "destructive" });
       return;
@@ -37,11 +38,16 @@ export default function CreateWishlist() {
       toast({ title: "Add at least one gift", variant: "destructive" });
       return;
     }
-    const id = generateId();
-    const lists = getWishlists();
-    lists.push({ id, name: name.trim(), birthday, message: message.trim() || undefined, gifts, createdAt: Date.now() });
-    saveWishlists(lists);
-    navigate(`/wishlist/${id}?created=true`);
+    setIsSubmitting(true);
+    try {
+      const id = generateId();
+      await createWishlist({ id, name: name.trim(), birthday, message: message.trim() || undefined, gifts });
+      navigate(`/wishlist/${id}?created=true`);
+    } catch (err) {
+      toast({ title: "Failed to create wishlist", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -116,8 +122,8 @@ export default function CreateWishlist() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="mt-8 flex justify-center">
-          <Button onClick={createWishlist} size="lg" className="gradient-warm text-primary-foreground font-semibold text-lg px-10 py-6 rounded-2xl shadow-lifted hover:opacity-90 transition-opacity">
-            <Share2 className="w-5 h-5 mr-2" /> Create & Share
+          <Button onClick={handleCreate} disabled={isSubmitting} size="lg" className="gradient-warm text-primary-foreground font-semibold text-lg px-10 py-6 rounded-2xl shadow-lifted hover:opacity-90 transition-opacity">
+            <Share2 className="w-5 h-5 mr-2" /> {isSubmitting ? "Creating..." : "Create & Share"}
           </Button>
         </motion.div>
       </div>

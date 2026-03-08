@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 export default function CreateWishlist() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [name, setName] = useState("");
   const [birthday, setBirthday] = useState("");
   const [message, setMessage] = useState("");

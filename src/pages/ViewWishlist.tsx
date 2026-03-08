@@ -11,15 +11,18 @@ export default function ViewWishlist() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const [wishlist, setWishlist] = useState<Wishlist | null>(null);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const isCreator = searchParams.get("created") === "true";
 
   useEffect(() => {
     if (id) {
-      const w = getWishlistById(id);
-      setWishlist(w || null);
-      if (isCreator) setShowConfetti(true);
+      getWishlistById(id).then((w) => {
+        setWishlist(w);
+        setLoading(false);
+        if (w && isCreator) setShowConfetti(true);
+      });
     }
   }, [id, isCreator]);
 
@@ -30,6 +33,14 @@ export default function ViewWishlist() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   if (!wishlist) {
     return (

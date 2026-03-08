@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { generateId, createWishlist, type GiftItem } from "@/lib/wishlist";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function CreateWishlist() {
   const navigate = useNavigate();

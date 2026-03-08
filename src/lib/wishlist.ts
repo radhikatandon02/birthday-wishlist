@@ -90,7 +90,7 @@ export async function getAllWishlists(userId?: string): Promise<Wishlist[]> {
     query = query.eq("user_id" as any, userId);
   }
 
-  if (error || !data) return [];
+  const { data, error } = await query;
 
   return data.map((w) => ({
     id: w.id,

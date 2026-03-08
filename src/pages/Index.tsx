@@ -1,23 +1,34 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Gift, Plus, Cake, Sparkles, PartyPopper } from "lucide-react";
+import { Gift, Plus, Cake, Sparkles, PartyPopper, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getAllWishlists, type Wishlist } from "@/lib/wishlist";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Index() {
+  const { user, signOut } = useAuth();
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
 
   useEffect(() => {
-    getAllWishlists().then(setWishlists);
-  }, []);
+    if (user) {
+      getAllWishlists(user.id).then(setWishlists);
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="container max-w-3xl px-4 pt-4 flex justify-end">
+        <Button variant="ghost" size="sm" onClick={signOut} className="text-muted-foreground hover:text-foreground">
+          <LogOut className="w-4 h-4 mr-2" /> Sign Out
+        </Button>
+      </div>
+
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-soft opacity-60" />
-        <div className="container max-w-3xl py-24 px-4 relative">
+        <div className="container max-w-3xl py-20 px-4 relative">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
             <motion.div
               initial={{ scale: 0 }}
@@ -70,10 +81,10 @@ export default function Index() {
         </div>
       </div>
 
-      {/* Existing wishlists */}
+      {/* User's wishlists */}
       {wishlists.length > 0 && (
         <div className="container max-w-3xl pb-16 px-4">
-          <h2 className="text-2xl font-display font-bold text-foreground mb-6">Recent Wishlists</h2>
+          <h2 className="text-2xl font-display font-bold text-foreground mb-6">Your Wishlists</h2>
           <div className="space-y-3">
             {wishlists.map((w) => (
               <Link key={w.id} to={`/wishlist/${w.id}`} className="block">

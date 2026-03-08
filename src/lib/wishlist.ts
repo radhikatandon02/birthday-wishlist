@@ -21,13 +21,14 @@ export function generateId(): string {
   return Math.random().toString(36).substring(2, 10);
 }
 
-export async function createWishlist(wishlist: Omit<Wishlist, "createdAt">): Promise<string> {
+export async function createWishlist(wishlist: Omit<Wishlist, "createdAt">, userId: string): Promise<string> {
   const { error: wError } = await supabase.from("wishlists").insert({
     id: wishlist.id,
     name: wishlist.name,
     birthday: wishlist.birthday || null,
     message: wishlist.message || null,
-  });
+    user_id: userId,
+  } as any);
   if (wError) throw wError;
 
   if (wishlist.gifts.length > 0) {

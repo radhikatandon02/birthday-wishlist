@@ -29,7 +29,7 @@ export default function Index() {
             </motion.div>
             <h1 className="text-5xl md:text-6xl font-bold font-display text-foreground leading-tight">
               Birthday<br />
-              <span className="bg-clip-text text-transparent gradient-warm">Wishlist</span>
+              <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(135deg, hsl(12 80% 62%), hsl(340 70% 65%))" }}>Wishlist</span>
             </h1>
             <p className="text-xl text-muted-foreground mt-4 max-w-md mx-auto">
               Create your dream gift list and share it with the people who care about you.

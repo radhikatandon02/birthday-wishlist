@@ -14,7 +14,68 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      gift_items: {
+        Row: {
+          id: string
+          link: string
+          name: string
+          note: string | null
+          price: string | null
+          sort_order: number
+          wishlist_id: string
+        }
+        Insert: {
+          id: string
+          link?: string
+          name: string
+          note?: string | null
+          price?: string | null
+          sort_order?: number
+          wishlist_id: string
+        }
+        Update: {
+          id?: string
+          link?: string
+          name?: string
+          note?: string | null
+          price?: string | null
+          sort_order?: number
+          wishlist_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_items_wishlist_id_fkey"
+            columns: ["wishlist_id"]
+            isOneToOne: false
+            referencedRelation: "wishlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wishlists: {
+        Row: {
+          birthday: string | null
+          created_at: string
+          id: string
+          message: string | null
+          name: string
+        }
+        Insert: {
+          birthday?: string | null
+          created_at?: string
+          id: string
+          message?: string | null
+          name: string
+        }
+        Update: {
+          birthday?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

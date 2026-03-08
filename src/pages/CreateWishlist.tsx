@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { generateId, createWishlist, type GiftItem } from "@/lib/wishlist";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function CreateWishlist() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [name, setName] = useState("");
   const [birthday, setBirthday] = useState("");
   const [message, setMessage] = useState("");
@@ -41,7 +43,7 @@ export default function CreateWishlist() {
     setIsSubmitting(true);
     try {
       const id = generateId();
-      await createWishlist({ id, name: name.trim(), birthday, message: message.trim() || undefined, gifts });
+      await createWishlist({ id, name: name.trim(), birthday, message: message.trim() || undefined, gifts }, user!.id);
       navigate(`/wishlist/${id}?created=true`);
     } catch (err) {
       toast({ title: "Failed to create wishlist", variant: "destructive" });

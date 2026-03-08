@@ -76,7 +76,7 @@ export default function Index() {
           <h2 className="text-2xl font-display font-bold text-foreground mb-6">Recent Wishlists</h2>
           <div className="space-y-3">
             {wishlists.map((w) => (
-              <Link key={w.id} to={`/wishlist/${w.id}`}>
+              <Link key={w.id} to={`/wishlist/${w.id}`} className="block">
                 <div className="bg-card rounded-2xl p-5 shadow-card hover:shadow-lifted transition-shadow flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full gradient-warm flex items-center justify-center flex-shrink-0">
                     <Cake className="w-5 h-5 text-primary-foreground" />

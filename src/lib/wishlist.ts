@@ -80,11 +80,15 @@ export async function getWishlistById(id: string): Promise<Wishlist | null> {
   };
 }
 
-export async function getAllWishlists(): Promise<Wishlist[]> {
-  const { data, error } = await supabase
+export async function getAllWishlists(userId?: string): Promise<Wishlist[]> {
+  let query = supabase
     .from("wishlists")
     .select("*, gift_items(*)")
     .order("created_at", { ascending: false });
+
+  if (userId) {
+    query = query.eq("user_id" as any, userId);
+  }
 
   if (error || !data) return [];
 
